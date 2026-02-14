@@ -1,6 +1,6 @@
 # StarUML Controller MCP Server
 
-An MCP (Model Context Protocol) server that exposes all 85 endpoints of [StarUML Controller](https://github.com/pontasan/staruml-controller) as tools. This enables AI assistants like Claude to programmatically read and edit ER diagrams and sequence diagrams in StarUML.
+An MCP (Model Context Protocol) server that exposes all 85 endpoints of [StarUML Controller](https://github.com/pontasan/staruml-controller) as tools. This enables AI assistants like Claude to programmatically read and edit ER diagrams and sequence diagrams in [StarUML](https://staruml.io/).
 
 <p align="center">
   <img src="images/image1.gif" alt="AI generating a Web Shopping ER diagram in StarUML" width="800">
@@ -18,6 +18,12 @@ An MCP (Model Context Protocol) server that exposes all 85 endpoints of [StarUML
   <img src="images/image3.gif" alt="AI generating a Login Check sequence diagram from source code" width="800">
   <br>
   <em>An AI tool analyzing source code and generating a sequence diagram</em>
+</p>
+
+## Architecture Overview
+
+<p align="center">
+  <img src="images/architecture.svg" alt="Architecture overview: Claude Code communicates with staruml-controller-mcp via MCP protocol, which connects to StarUML's staruml-controller extension via HTTP REST API" width="800">
 </p>
 
 ## Prerequisites
