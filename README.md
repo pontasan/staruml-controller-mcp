@@ -1,6 +1,8 @@
-# StarUML Controller MCP Server
+# StarUML Controller MCP Servers
 
-An MCP (Model Context Protocol) server that exposes all endpoints of [StarUML Controller](https://github.com/pontasan/staruml-controller) as 873 tools. This enables AI assistants like Claude to programmatically create and edit any StarUML diagram — UML, ERD, Sequence, BPMN, C4, SysML, Wireframe, MindMap, AWS, Azure, GCP, Flowchart, DFD, and more.
+A collection of 25 diagram-specific [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) servers that enable AI assistants like Claude to programmatically create and edit any StarUML diagram — UML, ERD, Sequence, BPMN, C4, SysML, Wireframe, MindMap, AWS, Azure, GCP, Flowchart, DFD, and more.
+
+Each server is built on a shared core infrastructure ([staruml-controller-mcp-core](https://github.com/pontasan/staruml-controller-mcp-core)) providing 63 common tools, plus diagram-specific tools tailored to each diagram type.
 
 <p align="center">
   <img src="images/image1.gif" alt="AI generating a Web Shopping ER diagram in StarUML" width="800">
@@ -9,21 +11,15 @@ An MCP (Model Context Protocol) server that exposes all endpoints of [StarUML Co
 </p>
 
 <p align="center">
-  <img src="images/image2.jpg" alt="PostgreSQL DDL generated from an ER diagram" width="800">
-  <br>
-  <em>PostgreSQL DDL exported from the ER diagram</em>
-</p>
-
-<p align="center">
   <img src="images/image3.gif" alt="AI generating a Login Check sequence diagram from source code" width="800">
   <br>
   <em>An AI tool analyzing source code and generating a sequence diagram</em>
 </p>
 
-## Architecture Overview
+## Architecture
 
 <p align="center">
-  <img src="images/architecture.svg" alt="Architecture overview: Claude Code communicates with staruml-controller-mcp via MCP protocol, which connects to StarUML's staruml-controller extension via HTTP REST API" width="800">
+  <img src="images/architecture.svg" alt="Architecture overview: Claude Code communicates with MCP servers via MCP protocol, which connect to StarUML's staruml-controller extension via HTTP REST API" width="800">
 </p>
 
 ## Prerequisites
@@ -31,18 +27,9 @@ An MCP (Model Context Protocol) server that exposes all endpoints of [StarUML Co
 - **Node.js 18+**
 - **StarUML** with the [StarUML Controller](https://github.com/pontasan/staruml-controller) extension installed and running
 
-## Setup
-
-```bash
-git clone https://github.com/pontasan/staruml-controller-mcp.git
-cd staruml-controller-mcp
-npm install
-npm run build
-```
-
 ## Starting the StarUML Controller Server
 
-Before using the MCP server, you need to start the StarUML Controller server:
+Before using any MCP server, you need to start the StarUML Controller server:
 
 1. **Launch StarUML** and open a project (or create a new one)
 
@@ -62,39 +49,55 @@ Before using the MCP server, you need to start the StarUML Controller server:
 
 To stop, select **Tools > StarUML Controller > Stop Server** from the menu bar.
 
-## Usage with Claude Desktop
+## Available MCP Servers
 
-Add the following to your Claude Desktop configuration file:
+### Core Infrastructure
 
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+| Package | Description |
+|---|---|
+| [staruml-controller-mcp-core](https://github.com/pontasan/staruml-controller-mcp-core) | Shared infrastructure + 63 common tools (general, project, utility, diagrams, notes, shapes, views, elements) |
 
-```json
-{
-  "mcpServers": {
-    "staruml-controller": {
-      "command": "node",
-      "args": ["/absolute/path/to/staruml-controller-mcp/dist/index.js"]
-    }
-  }
-}
-```
+### UML Diagrams (13 servers)
 
-## Usage with Claude Code
+| Server | Diagram Type | Specific Tools | Total Tools |
+|---|---|---|---|
+| [staruml-controller-class-mcp](https://github.com/pontasan/staruml-controller-class-mcp) | Class / Package | 74 | 137 |
+| [staruml-controller-usecase-mcp](https://github.com/pontasan/staruml-controller-usecase-mcp) | Use Case | 47 | 110 |
+| [staruml-controller-activity-mcp](https://github.com/pontasan/staruml-controller-activity-mcp) | Activity | 54 | 117 |
+| [staruml-controller-statemachine-mcp](https://github.com/pontasan/staruml-controller-statemachine-mcp) | State Machine | 27 | 90 |
+| [staruml-controller-seq-mcp](https://github.com/pontasan/staruml-controller-seq-mcp) | Sequence | 40 | 103 |
+| [staruml-controller-communication-mcp](https://github.com/pontasan/staruml-controller-communication-mcp) | Communication | 15 | 78 |
+| [staruml-controller-component-mcp](https://github.com/pontasan/staruml-controller-component-mcp) | Component | 35 | 98 |
+| [staruml-controller-deployment-mcp](https://github.com/pontasan/staruml-controller-deployment-mcp) | Deployment | 45 | 108 |
+| [staruml-controller-object-mcp](https://github.com/pontasan/staruml-controller-object-mcp) | Object | 17 | 80 |
+| [staruml-controller-composite-mcp](https://github.com/pontasan/staruml-controller-composite-mcp) | Composite Structure | 40 | 103 |
+| [staruml-controller-timing-mcp](https://github.com/pontasan/staruml-controller-timing-mcp) | Timing | 20 | 83 |
+| [staruml-controller-overview-mcp](https://github.com/pontasan/staruml-controller-overview-mcp) | Interaction Overview | 25 | 88 |
+| [staruml-controller-profile-mcp](https://github.com/pontasan/staruml-controller-profile-mcp) | Profile | 25 | 88 |
 
-Add the MCP server to your project or global scope:
+### Non-UML Diagrams (12 servers)
 
-```bash
-# Project scope
-claude mcp add staruml-controller node /absolute/path/to/staruml-controller-mcp/dist/index.js
+| Server | Diagram Type | Specific Tools | Total Tools |
+|---|---|---|---|
+| [staruml-controller-erd-mcp](https://github.com/pontasan/staruml-controller-erd-mcp) | ERD | 36 | 99 |
+| [staruml-controller-bpmn-mcp](https://github.com/pontasan/staruml-controller-bpmn-mcp) | BPMN | 84 | 147 |
+| [staruml-controller-c4-mcp](https://github.com/pontasan/staruml-controller-c4-mcp) | C4 | 15 | 78 |
+| [staruml-controller-sysml-mcp](https://github.com/pontasan/staruml-controller-sysml-mcp) | SysML | 81 | 144 |
+| [staruml-controller-flowchart-mcp](https://github.com/pontasan/staruml-controller-flowchart-mcp) | Flowchart | 15 | 78 |
+| [staruml-controller-dfd-mcp](https://github.com/pontasan/staruml-controller-dfd-mcp) | DFD | 25 | 88 |
+| [staruml-controller-wireframe-mcp](https://github.com/pontasan/staruml-controller-wireframe-mcp) | Wireframe | 15 | 78 |
+| [staruml-controller-mindmap-mcp](https://github.com/pontasan/staruml-controller-mindmap-mcp) | MindMap | 15 | 78 |
+| [staruml-controller-infoflow-mcp](https://github.com/pontasan/staruml-controller-infoflow-mcp) | Information Flow | 15 | 78 |
+| [staruml-controller-aws-mcp](https://github.com/pontasan/staruml-controller-aws-mcp) | AWS | 15 | 78 |
+| [staruml-controller-azure-mcp](https://github.com/pontasan/staruml-controller-azure-mcp) | Azure | 15 | 78 |
+| [staruml-controller-gcp-mcp](https://github.com/pontasan/staruml-controller-gcp-mcp) | GCP | 15 | 78 |
 
-# Global scope
-claude mcp add --scope user staruml-controller node /absolute/path/to/staruml-controller-mcp/dist/index.js
-```
+## Common Tools (63)
 
-## Available Tools (873)
+Every MCP server includes 63 shared tools provided by the core package:
 
-All tools accept optional connection parameters: `host` (default: `localhost`) and `port` (default: `12345`). To connect to a StarUML instance on another machine, specify `host` (e.g., `"192.168.1.100"`).
+<details>
+<summary>Click to expand</summary>
 
 ### General (9 tools)
 
@@ -183,7 +186,7 @@ All tools accept optional connection parameters: `host` (default: `localhost`) a
 | Tool | Description |
 |---|---|
 | `view_update` | Move/resize a view (left, top, width, height) |
-| `view_update_style` | Update visual style (fillColor, lineColor, fontColor, fontSize, autoResize, etc.) |
+| `view_update_style` | Update visual style (fillColor, lineColor, fontColor, fontSize, etc.) |
 | `view_reconnect` | Reconnect an edge to different source/target |
 | `view_align` | Align/distribute multiple views |
 
@@ -199,183 +202,46 @@ All tools accept optional connection parameters: `host` (default: `localhost`) a
 | `element_create_child` | Create a child element (attribute, operation, etc.) |
 | `element_reorder` | Reorder element within parent (up/down) |
 
-### ERD (36 tools)
+</details>
 
-ER diagrams are the source of truth for database schema. When modifying DDL, always update ER diagrams first, then use `erd_generate_ddl`.
+## Quick Start
 
-| Resource | Tools |
-|---|---|
-| Data Models | `erd_list_data_models`, `erd_create_data_model`, `erd_get_data_model`, `erd_update_data_model`, `erd_delete_data_model` |
-| Diagrams | `erd_list_diagrams`, `erd_create_diagram`, `erd_get_diagram`, `erd_update_diagram`, `erd_delete_diagram` |
-| Entities | `erd_list_entities`, `erd_create_entity`, `erd_get_entity`, `erd_update_entity`, `erd_delete_entity` |
-| Columns | `erd_list_columns`, `erd_create_column`, `erd_get_column`, `erd_update_column`, `erd_delete_column` |
-| Sequences | `erd_list_sequences`, `erd_create_sequence`, `erd_get_sequence`, `erd_update_sequence`, `erd_delete_sequence` |
-| Indexes | `erd_list_indexes`, `erd_create_index`, `erd_get_index`, `erd_update_index`, `erd_delete_index` |
-| Relationships | `erd_list_relationships`, `erd_create_relationship`, `erd_get_relationship`, `erd_update_relationship`, `erd_delete_relationship` |
-| DDL | `erd_generate_ddl` |
+1. **Build the core package**
 
-### Sequence Diagram (40 tools)
-
-Sequence diagrams help developers understand process flows and module connections.
-
-| Resource | Tools |
-|---|---|
-| Interactions | `seq_list_interactions`, `seq_create_interaction`, `seq_get_interaction`, `seq_update_interaction`, `seq_delete_interaction` |
-| Diagrams | `seq_list_diagrams`, `seq_create_diagram`, `seq_get_diagram`, `seq_update_diagram`, `seq_delete_diagram` |
-| Lifelines | `seq_list_lifelines`, `seq_create_lifeline`, `seq_get_lifeline`, `seq_update_lifeline`, `seq_delete_lifeline` |
-| Messages | `seq_list_messages`, `seq_create_message`, `seq_get_message`, `seq_update_message`, `seq_delete_message` |
-| Combined Fragments | `seq_list_combined_fragments`, `seq_create_combined_fragment`, `seq_get_combined_fragment`, `seq_update_combined_fragment`, `seq_delete_combined_fragment` |
-| Operands | `seq_list_operands`, `seq_create_operand`, `seq_get_operand`, `seq_update_operand`, `seq_delete_operand` |
-| State Invariants | `seq_list_state_invariants`, `seq_create_state_invariant`, `seq_get_state_invariant`, `seq_update_state_invariant`, `seq_delete_state_invariant` |
-| Interaction Uses | `seq_list_interaction_uses`, `seq_create_interaction_use`, `seq_get_interaction_use`, `seq_update_interaction_use`, `seq_delete_interaction_use` |
-
-### Diagram Family APIs (734 tools)
-
-Each diagram family below provides dedicated CRUD tools with type-specific validation. All families share a common pattern: 5 tools for diagrams, 5 per resource, 2 per child, and 5 per relation.
-
-#### Class/Package Diagram (`class_*`) — 68 tools
-
-| Resource | Tools (list, create, get, update, delete) |
-|---|---|
-| Diagrams | `class_list_diagrams`, `class_create_diagram`, `class_get_diagram`, `class_update_diagram`, `class_delete_diagram` |
-| Classes | `class_list_classes`, `class_create_class`, `class_get_class`, `class_update_class`, `class_delete_class` |
-| — Attributes | `class_list_class_attributes`, `class_create_class_attribute` |
-| — Operations | `class_list_class_operations`, `class_create_class_operation` |
-| — Receptions | `class_list_class_receptions`, `class_create_class_reception` |
-| — Template Params | `class_list_class_template_parameters`, `class_create_class_template_parameter` |
-| Interfaces | `class_list_interfaces`, `class_create_interface`, `class_get_interface`, `class_update_interface`, `class_delete_interface` |
-| — Attributes | `class_list_interface_attributes`, `class_create_interface_attribute` |
-| — Operations | `class_list_interface_operations`, `class_create_interface_operation` |
-| Enumerations | `class_list_enumerations`, `class_create_enumeration`, `class_get_enumeration`, `class_update_enumeration`, `class_delete_enumeration` |
-| — Literals | `class_list_enumeration_literals`, `class_create_enumeration_literal` |
-| Data Types | `class_list_data_types`, `class_create_data_type`, `class_get_data_type`, `class_update_data_type`, `class_delete_data_type` |
-| Packages | `class_list_packages`, `class_create_package`, `class_get_package`, `class_update_package`, `class_delete_package` |
-| Associations | `class_list_associations`, `class_create_association`, `class_get_association`, `class_update_association`, `class_delete_association` |
-| Generalizations | `class_list_generalizations`, `class_create_generalization`, `class_get_generalization`, `class_update_generalization`, `class_delete_generalization` |
-| Dependencies | `class_list_dependencies`, `class_create_dependency`, `class_get_dependency`, `class_update_dependency`, `class_delete_dependency` |
-| Interface Realizations | `class_list_interface_realizations`, `class_create_interface_realization`, `class_get_interface_realization`, `class_update_interface_realization`, `class_delete_interface_realization` |
-| Realizations | `class_list_realizations`, `class_create_realization`, `class_get_realization`, `class_update_realization`, `class_delete_realization` |
-| Template Bindings | `class_list_template_bindings`, `class_create_template_binding`, `class_get_template_binding`, `class_update_template_binding`, `class_delete_template_binding` |
-
-#### Use Case Diagram (`usecase_*`)
-
-Resources: Actors, Use Cases (with Extension Points), Subjects | Relations: Associations (with ends), Includes, Extends, Generalizations, Dependencies
-
-#### Activity Diagram (`activity_*`)
-
-Resources: Actions (with Input/Output Pins), Control Nodes, Object Nodes, Partitions, Regions | Relations: Control Flows, Object Flows, Exception Handlers, Activity Interrupts
-
-#### State Machine Diagram (`statemachine_*`)
-
-Resources: States (with Regions), Pseudostates, Final States | Relations: Transitions
-
-#### Component Diagram (`component_*`)
-
-Resources: Components, Artifacts | Relations: Component Realizations, Dependencies, Generalizations, Interface Realizations
-
-#### Deployment Diagram (`deployment_*`)
-
-Resources: Nodes, Node Instances, Artifact Instances, Component Instances, Artifacts | Relations: Deployments, Communication Paths, Dependencies
-
-#### Object Diagram (`object_*`)
-
-Resources: Objects (with Slots) | Relations: Links
-
-#### Communication Diagram (`communication_*`)
-
-Resources: Lifelines | Relations: Connectors
-
-#### Composite Structure Diagram (`composite_*`)
-
-Resources: Ports, Parts, Collaborations, Collaboration Uses | Relations: Role Bindings, Dependencies, Realizations
-
-#### Information Flow Diagram (`infoflow_*`)
-
-Resources: Info Items | Relations: Information Flows
-
-#### Profile Diagram (`profile_*`)
-
-Resources: Profiles, Stereotypes, Metaclasses | Relations: Extensions
-
-#### Timing Diagram (`timing_*`)
-
-Resources: Lifelines, Timing States | Relations: Time Segments
-
-#### Interaction Overview Diagram (`overview_*`)
-
-Resources: Interaction Uses, Interactions, Control Nodes | Relations: Control Flows
-
-#### Flowchart Diagram (`flowchart_*`)
-
-Resources: Nodes | Relations: Flows
-
-#### DFD Diagram (`dfd_*`)
-
-Resources: External Entities, Processes, Data Stores | Relations: Data Flows
-
-#### BPMN Diagram (`bpmn_*`)
-
-Resources: Participants (with Lanes), Tasks, Sub-Processes, Events (with Event Definitions), Gateways, Data Objects, Conversations, Choreographies, Annotations | Relations: Sequence Flows, Message Flows, Associations, Data Associations, Message Links, Conversation Links
-
-#### C4 Diagram (`c4_*`)
-
-Resources: Elements | Relations: Relationships
-
-#### SysML Diagram (`sysml_*`)
-
-Resources: Requirements, Blocks (with Properties, Operations, Flow Properties), Stakeholders, Viewpoints, Views, Parts | Relations: Conforms, Exposes, Copies, Derive Reqts, Verifies, Satisfies, Refines, Connectors
-
-#### Wireframe Diagram (`wireframe_*`)
-
-Resources: Frames, Widgets
-
-#### MindMap Diagram (`mindmap_*`)
-
-Resources: Nodes | Relations: Edges
-
-#### AWS Diagram (`aws_*`)
-
-Resources: Elements | Relations: Arrows
-
-#### Azure Diagram (`azure_*`)
-
-Resources: Elements | Relations: Connectors
-
-#### GCP Diagram (`gcp_*`)
-
-Resources: Elements | Relations: Paths
-
-## Architecture
-
-```
-src/
-  index.ts                  # Entry point (stdio transport)
-  server.ts                 # Tool registration and McpServer setup
-  http-client.ts            # REST API client (native fetch)
-  response-formatter.ts     # MCP response formatting
-  tool-registry.ts          # Metadata-driven tool registration engine
-  tools/
-    general.ts              # 9 tools: status, element, tags, project
-    project.ts              # 6 tools: new, close, import, export
-    utility.ts              # 6 tools: undo, redo, search, validate, mermaid, generate
-    diagrams.ts             # 15 tools: diagram CRUD, export, layout, zoom
-    notes.ts                # 11 tools: notes, note links, free lines
-    shapes.ts               # 5 tools: shape CRUD
-    views.ts                # 4 tools: view position, style, reconnect, align
-    elements.ts             # 7 tools: element update, delete, children, relocate
-    family-factory.ts       # Declarative tool generation engine
-    families/
-      types.ts              # FamilyConfig type definitions
-      index.ts              # Aggregates all family tools
-      class.ts              # Class/Package diagram config
-      usecase.ts            # Use Case diagram config
-      activity.ts           # Activity diagram config
-      erd.ts                # ERD config (data models, entities, columns, relationships, DDL)
-      seq.ts                # Sequence diagram config (interactions, lifelines, messages, fragments)
-      ... (20 more family configs)
+```bash
+git clone https://github.com/pontasan/staruml-controller-mcp-core.git
+cd staruml-controller-mcp-core
+npm install
+npm run build
 ```
 
-Each tool is a declarative definition object. The `tool-registry` engine automatically handles host/port injection, URL parameter substitution, query string construction, request body building, and response formatting. The `family-factory` generates CRUD tools from declarative `FamilyConfig` objects, supporting containers, parent-scoped resources, full CRUD children, relations with ends, and custom tools.
+2. **Build the MCP server you need** (e.g., ERD)
+
+```bash
+git clone https://github.com/pontasan/staruml-controller-erd-mcp.git
+cd staruml-controller-erd-mcp
+npm install
+npm run build
+```
+
+3. **Add to Claude Code**
+
+```bash
+claude mcp add staruml-erd node /absolute/path/to/staruml-controller-erd-mcp/dist/index.js
+```
+
+Or add to **Claude Desktop** (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "staruml-erd": {
+      "command": "node",
+      "args": ["/absolute/path/to/staruml-controller-erd-mcp/dist/index.js"]
+    }
+  }
+}
+```
 
 ## License
 
