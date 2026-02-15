@@ -81,6 +81,13 @@ async function main() {
     console.log(`Total tools registered: ${toolList.tools.length}\n`)
 
     // ═══════════════════════════════════════════════════
+    // 0. Save project snapshot for cleanup
+    // ═══════════════════════════════════════════════════
+    const snapshotPath = "/tmp/test_mcp_snapshot.mdj"
+    await call(client, "save_project", { path: snapshotPath })
+    console.log(`Saved project snapshot to ${snapshotPath}\n`)
+
+    // ═══════════════════════════════════════════════════
     // 1. General / Existing tools
     // ═══════════════════════════════════════════════════
     console.log("─── General ───")
@@ -880,14 +887,15 @@ async function main() {
     await testTool(client, "open_project", { path: "/tmp/test_mcp_project.mdj" })
 
     // ═══════════════════════════════════════════════════
-    // Final undo to clean up
+    // Final Cleanup: restore project snapshot
     // ═══════════════════════════════════════════════════
     console.log("\n── Final Cleanup ──")
-    // Multiple undos to undo test changes
-    for (let i = 0; i < 5; i++) {
-        await call(client, "undo")
+    const restoreR = await call(client, "open_project", { path: snapshotPath })
+    if (restoreR.ok) {
+        log("pass", "restore_project_snapshot")
+    } else {
+        log("fail", "restore_project_snapshot", "could not restore snapshot")
     }
-    log("pass", "final_undo_cleanup")
 
     // ═══════════════════════════════════════════════════
     // Summary
